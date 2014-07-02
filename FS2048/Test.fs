@@ -55,7 +55,7 @@ type Test() =
 
 
     [<Test>]
-    member x.``Simple Move``() =
+    member x.``Simple Move 1``() =
         let b = Game.zeroBoard ()
         Game.set b 0<R> 0<C> 2<V>
         Game.set b 1<R> 0<C> 2<V>
@@ -90,4 +90,51 @@ type Test() =
             |]
         Assert.AreEqual(expected, b)
 
-               
+        Game.move b Down
+        let expected =
+            [|
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 8<V>; 0<V>; 0<V>; 0<V>|]
+                [| 2<V>; 0<V>; 0<V>; 0<V>|]
+            |]
+        Assert.AreEqual(expected, b)
+
+        Game.move b Right
+        let expected =
+            [|
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 8<V>|]
+                [| 0<V>; 0<V>; 0<V>; 2<V>|]
+            |]
+        Assert.AreEqual(expected, b)
+
+
+
+    [<Test>]
+    member x.``Simple Move 2``() =
+        let b = Game.zeroBoard ()
+        Game.set b 0<R> 0<C> 2<V>
+        Game.set b 1<R> 0<C> 4<V>
+        Game.set b 2<R> 0<C> 2<V>
+        Game.set b 2<R> 1<C> 2<V>
+        Game.set b 1<R> 2<C> 4<V>
+        Game.set b 0<R> 3<C> 4<V>
+        let expected =
+            [|
+                [| 2<V>; 0<V>; 0<V>; 4<V>|]
+                [| 4<V>; 0<V>; 4<V>; 0<V>|]
+                [| 2<V>; 2<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            |]
+        Assert.AreEqual(expected, b)
+        Game.move b Right
+        let expected =
+            [|
+                [| 0<V>; 0<V>; 2<V>; 4<V>|]
+                [| 0<V>; 0<V>; 0<V>; 8<V>|]
+                [| 0<V>; 0<V>; 0<V>; 4<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            |]
+        Assert.AreEqual(expected, b)

@@ -36,9 +36,18 @@ module Game =
         b.[i].[j] <- value
     
     let merge a b =
-        if a = b
-        then a+b, 0<V>
-        else a, b
+        if   a = 0<V> then b,   0<V>
+        elif a = b    then a+b, 0<V>
+        else               a,   b
 
-    let move (b:Board) (m:Move) =
-        failwith "move not implemented"
+    let move (b:Board) = function
+         Up -> for r in 0..2 do
+                for c in 0..3 do
+                    let u = b.[r].[c]
+                    let v = b.[r+1].[c]
+                    let (x, y) = merge u  v
+                    b.[r]  .[c] <- x
+                    b.[r+1].[c] <- y
+        | Down  -> failwith "move down not implemented"
+        | Left  -> failwith "move down not implemented"
+        | Right -> failwith "move down not implemented"

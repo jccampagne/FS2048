@@ -50,7 +50,7 @@ type Test() =
     [<Test>]
     member x.``Merge 0 and 2``() =
         let result = Game.merge 0<V> 2<V>
-        let expected = (2<V>, 0<V>)
+        let expected = (0<V>, 2<V>)
         Assert.AreEqual (expected, result)
 
     
@@ -121,7 +121,7 @@ type Test() =
         let b = 
             [|
                 [| 4<V>; 4<V>; 2<V>; 2<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 4<V>; 2<V>; 2<V>; 0<V>|]
                 [| 2<V>; 2<V>; 2<V>; 2<V>|]
                 [| 0<V>; 2<V>; 2<V>; 4<V>|]
             |]
@@ -129,10 +129,11 @@ type Test() =
         let expected = 
             [|
                 [| 8<V>; 4<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 4<V>; 4<V>; 0<V>; 0<V>|]
                 [| 4<V>; 4<V>; 0<V>; 0<V>|]
                 [| 4<V>; 4<V>; 0<V>; 0<V>|]
             |]
+        printf "%A" b
         Assert.AreEqual(expected, b)
 
 

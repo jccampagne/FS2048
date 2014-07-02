@@ -36,8 +36,7 @@ module Game =
         b.[i].[j] <- value
     
     let merge a b =
-        if   a = 0<V> then b,   0<V>
-        elif a = b    then a+b, 0<V>
+        if a = b    then a+b, 0<V>
         else               a,   b
 
     let slide (b:Board) (direction:Move) =
@@ -92,49 +91,44 @@ module Game =
                         b.[!z].[c] <- 0<V>
                         i := (!i - 1)
     
-
-    let wrap_merge u v wasUpdated =
-        let (x,y) = merge u v
-        let hasChanged = not ((u,v) = (x,y))
-        let updated = wasUpdated || hasChanged
-        (x, y, updated)
-
-    let rec move (b:Board) (direction:Move) =
-        let isUpdated = ref false
+    let move (b:Board) (direction:Move) =
+        printf "  m %A\n" b
+        slide b direction
+        printf "  k %A\n" b
+        (
         match direction with
          Up ->
             for r in 0..2 do
                 for c in 0..3 do
                     let u = b.[r].[c]
                     let v = b.[r+1].[c]
-                    let (x, y, updt) = wrap_merge u v !isUpdated
+                    let (x, y) = merge u v
                     b.[r]  .[c] <- x
                     b.[r+1].[c] <- y
-                    if updt then move b direction
         | Down  ->
             for r in 3..-1..1 do
                 for c in 0..3 do
                     let u = b.[r].[c]
                     let v = b.[r-1].[c]
-                    let (x, y, updt) = wrap_merge u v !isUpdated
+                    let (x, y) = merge u v
                     b.[r].[c]   <- x
                     b.[r-1].[c] <- y
-                    if updt then move b direction
         | Left  ->
             for r in 0..3 do
                 for c in 0..2 do
                     let u = b.[r].[c]
                     let v = b.[r].[c+1]
-                    let (x, y, updt) = wrap_merge u v !isUpdated
+                    let (x, y) = merge u v
                     b.[r].[c]   <- x
                     b.[r].[c+1] <- y
-                    if updt then move b direction
         | Right ->
             for r in 0..3 do
                 for c in 3..-1..1 do
                     let u = b.[r].[c]
                     let v = b.[r].[c-1]
-                    let (x, y, updt) = wrap_merge u v !isUpdated
+                    let (x, y) = merge u v
                     b.[r].[c]   <- x
                     b.[r].[c-1] <- y
-                    if updt then move b direction
+        )
+        printf "  x %A\n" b
+        slide b direction

@@ -92,7 +92,27 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
-        printf "%A" b
+        Assert.AreEqual(expected, b)
+
+        Game.slide b Down
+        let expected = 
+            [|
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 2<V>|]
+                [| 0<V>; 4<V>; 4<V>; 2<V>|]
+            |]
+        Assert.AreEqual(expected, b)
+
+        Game.slide b Up
+        let expected = 
+            [|
+                [| 0<V>; 4<V>; 4<V>; 2<V>|]
+                [| 0<V>; 0<V>; 0<V>; 2<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            |]
+        printf " r %A" b
         Assert.AreEqual(expected, b)
 
 

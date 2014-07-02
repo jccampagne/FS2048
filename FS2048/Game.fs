@@ -47,24 +47,49 @@ module Game =
                     let i = ref 0
                     while !i < 3 && b.[r].[!i] <> 0<V> do
                         i := !i + 1
-                    let c = ref !i
-                    while !c < 3  do
-                        while !c < 3 && b.[r].[!c] = 0<V> do
-                            c := (!c + 1)
-                        b.[r].[!i] <- b.[r].[!c]
-                        b.[r].[!c] <- 0<V>
+                    let z = ref !i
+                    while !z < 3  do
+                        while !z < 3 && b.[r].[!z] = 0<V> do
+                            z := (!z + 1)
+                        b.[r].[!i] <- b.[r].[!z]
+                        b.[r].[!z] <- 0<V>
+                        i := (!i + 1)
+            | Up ->
+                for c in 0..3 do
+                    let i = ref 0
+                    while !i < 3 && b.[!i].[c] <> 0<V> do
+                        i := !i + 1
+                    let z = ref !i
+                    while !z < 3  do
+                        printf " d %A\n" b
+                        while !z < 3 && b.[!z].[c] = 0<V> do
+                            z := (!z + 1)
+                        b.[!i].[c] <- b.[!z].[c]
+                        b.[!z].[c] <- 0<V>
                         i := (!i + 1)
             | Right ->
                 for r in 0..3 do
                     let i = ref 3
                     while !i > 0 && b.[r].[!i] <> 0<V> do
                         i := !i - 1
-                    let c = ref !i
-                    while !c > 0  do
-                        while !c > 0 && b.[r].[!c] = 0<V> do
-                            c := (!c - 1)
-                        b.[r].[!i] <- b.[r].[!c]
-                        b.[r].[!c] <- 0<V>
+                    let z = ref !i
+                    while !z > 0  do
+                        while !z > 0 && b.[r].[!z] = 0<V> do
+                            z := (!z - 1)
+                        b.[r].[!i] <- b.[r].[!z]
+                        b.[r].[!z] <- 0<V>
+                        i := (!i - 1)
+            | Down ->
+                for c in 0..3 do
+                    let i = ref 3
+                    while !i > 0 && b.[!i].[c] <> 0<V> do
+                        i := !i - 1
+                    let z = ref !i
+                    while !z >0   do
+                        while !z > 0 && b.[!z].[c] = 0<V> do
+                            z := (!z - 1)
+                        b.[!i].[c] <- b.[!z].[c]
+                        b.[!z].[c] <- 0<V>
                         i := (!i - 1)
     
 

@@ -18,7 +18,9 @@ module Game =
 
     type Board = int<V> [] []
 
-    let (zeroBoard : Board) =
+    type Move = Up | Down | Left | Right
+
+    let zeroBoard () =
          [| [| 0<V>; 0<V>; 0<V>; 0<V>|]
             [| 0<V>; 0<V>; 0<V>; 0<V>|]
             [| 0<V>; 0<V>; 0<V>; 0<V>|]

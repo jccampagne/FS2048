@@ -54,6 +54,18 @@ module Game =
                         b.[r].[!i] <- b.[r].[!c]
                         b.[r].[!c] <- 0<V>
                         i := (!i + 1)
+            | Right ->
+                for r in 0..3 do
+                    let i = ref 3
+                    while !i > 0 && b.[r].[!i] <> 0<V> do
+                        i := !i - 1
+                    let c = ref !i
+                    while !c > 0  do
+                        while !c > 0 && b.[r].[!c] = 0<V> do
+                            c := (!c - 1)
+                        b.[r].[!i] <- b.[r].[!c]
+                        b.[r].[!c] <- 0<V>
+                        i := (!i - 1)
     
 
     let wrap_merge u v wasUpdated =

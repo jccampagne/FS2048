@@ -40,14 +40,33 @@ module Game =
         elif a = b    then a+b, 0<V>
         else               a,   b
 
-    let move (b:Board) = function
-         Up -> for r in 0..2 do
+
+    let wrap_merge u v wasUpdated =
+        let (x,y) = merge u v
+        let hasChanged = not ((u,v) = (x,y))
+        let updated = wasUpdated || hasChanged
+        (x, y, updated)
+
+    let rec move (b:Board) (direction:Move) =
+        let isUpdated = ref false
+        match direction with
+         Up ->
+            for r in 0..2 do
                 for c in 0..3 do
                     let u = b.[r].[c]
                     let v = b.[r+1].[c]
-                    let (x, y) = merge u  v
+                    let (x, y, updt) = wrap_merge u v !isUpdated
                     b.[r]  .[c] <- x
                     b.[r+1].[c] <- y
+                    if updt then move b direction
         | Down  -> failwith "move down not implemented"
-        | Left  -> failwith "move down not implemented"
+        | Left  ->
+            for r in 0..3 do
+                for c in 0..2 do
+                    let u = b.[r].[c]
+                    let v = b.[r].[c+1]
+                    let (x, y, updt) = wrap_merge u v !isUpdated
+                    b.[r].[c]   <- x
+                    b.[r].[c+1] <- y
+                    if updt then move b direction
         | Right -> failwith "move down not implemented"

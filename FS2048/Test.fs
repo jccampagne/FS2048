@@ -79,4 +79,15 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         Assert.AreEqual(expected, b)
-       
+
+        Game.move b Left
+        let expected =
+            [|
+                [| 8<V>; 0<V>; 0<V>; 0<V>|]
+                [| 2<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            |]
+        Assert.AreEqual(expected, b)
+
+               

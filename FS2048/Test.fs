@@ -35,6 +35,18 @@ type Test() =
         let b = Game.zeroBoard ()
         Game.set b 0<R> 10<C> 4<V>
        
+    [<Test>]
+    member x.``Merge 1``() =
+        let result = Game.merge 2<V> 2<V>
+        let expected = (4<V>, 0<V>)
+        Assert.AreEqual (expected, result)
+
+    [<Test>]
+    member x.``Merge 2``() =
+        let result = Game.merge 2<V> 8<V>
+        let expected = (2<V>, 8<V>)
+        Assert.AreEqual (expected, result)
+
 
     [<Test>]
     member x.``Simple Move``() =
@@ -51,3 +63,14 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         Assert.AreEqual(expected, b)
+
+        Game.move b Up
+        let expected =
+            [|
+                [| 4<V>; 0<V>; 0<V>; 4<V>|]
+                [| 2<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            |]
+        Assert.AreEqual(expected, b)
+       

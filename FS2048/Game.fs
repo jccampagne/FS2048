@@ -40,6 +40,21 @@ module Game =
         elif a = b    then a+b, 0<V>
         else               a,   b
 
+    let slide (b:Board) (direction:Move) =
+        match direction with
+            Left ->
+                for r in 0..3 do
+                    let i = ref 0
+                    while !i < 3 && b.[r].[!i] <> 0<V> do
+                        i := !i + 1
+                    let c = ref !i
+                    while !c < 3  do
+                        while !c < 3 && b.[r].[!c] = 0<V> do
+                            c := (!c + 1)
+                        b.[r].[!i] <- b.[r].[!c]
+                        b.[r].[!c] <- 0<V>
+                        i := (!i + 1)
+    
 
     let wrap_merge u v wasUpdated =
         let (x,y) = merge u v

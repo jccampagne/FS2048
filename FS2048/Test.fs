@@ -54,6 +54,28 @@ type Test() =
         Assert.AreEqual (expected, result)
 
     
+
+    [<Test>]
+    member x.``Simple Slide``() =
+        let b = 
+            [|
+                [| 4<V>; 4<V>; 0<V>; 2<V>|]
+                [| 0<V>; 0<V>; 2<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            |]
+        Game.slide b Left
+        let expected = 
+            [|
+                [| 4<V>; 4<V>; 2<V>; 0<V>|]
+                [| 2<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            |]
+        printf "%A" b
+        Assert.AreEqual(expected, b)
+
+
     [<Test>]
     member x.``Simple Move 0``() =
         let b = 

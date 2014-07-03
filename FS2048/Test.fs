@@ -301,3 +301,25 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> ignore
+
+    [<Test>]
+    member x.``has emtpy Cell``() =
+        let s = makeState [|
+                                [| 0<V>; 0<V>; 2<V>; 4<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 8<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 4<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                            |]
+        Assert.IsTrue (hasEmptyCell s)
+
+    [<Test>]
+    member x.``has no emtpy cell``() =
+        let s = makeState
+                            [|
+                                [| 2<V>; 2<V>; 2<V>; 4<V>|]
+                                [| 2<V>; 2<V>; 2<V>; 8<V>|]
+                                [| 2<V>; 2<V>; 2<V>; 4<V>|]
+                                [| 2<V>; 2<V>; 2<V>; 2<V>|]
+                            |]
+        Assert.IsFalse (hasEmptyCell s)
+

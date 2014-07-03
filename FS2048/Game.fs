@@ -147,3 +147,15 @@ module Game =
             )
         slide g direction
         {g with score = g.score + !pointsAcc}
+
+    let hasEmptyCell (g:State) =
+        let findRow row =
+            let result = Seq.tryFind (fun cell -> cell = 0<V>) row
+            match result with
+                | None -> false
+                | Some _ -> true
+        let result = Seq.tryFind findRow g.board
+        (match result with
+            | None -> false
+            | Some (_) -> true
+            )

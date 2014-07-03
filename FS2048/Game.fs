@@ -3,26 +3,31 @@
 
 module Game =
     
+    // Column
     [<Measure>]
     type C
 
+    // Row
     [<Measure>]
     type R
 
+    // Value
     [<Measure>]
     type V
 
+     // Point
     [<Measure>]
-    type Score
+    type P
 
     type Col = int<C>
     type Row = int<R>
     type Cval = int<V>
 
     type Board = int<V> [] []
+    type Score = int<P>
 
     type State = {board : Board;
-                  score : int<Score>}
+                  score : Score}
 
     type Move = Up | Down | Left | Right
 
@@ -42,8 +47,8 @@ module Game =
         b.[i].[j] <- value
     
     let merge a b =
-        if a = b    then a+b, 0<V>, ((a+b)/1<V>*1<Score>)
-        else               a,    b, 0<Score>  
+        if a = b then a+b, 0<V>, ((a + b) / 1<V> * 1<P>)
+        else          a,      b,                   0<P>  
 
     let slide (g:State) (direction:Move) =
         let b = g.board
@@ -100,7 +105,7 @@ module Game =
     let move (g:State) (direction:Move) =
         slide g direction
         let b = g.board
-        let pointsAcc = (ref 0<Score>)
+        let pointsAcc = (ref 0<P>)
         let points = (
             match direction with
              Up ->

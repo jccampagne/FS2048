@@ -17,7 +17,7 @@ type Test() =
                     printf "bindCheck failed at line %s" line
                     raise ex
     // helper function
-    let bindCheckScore line (expectedScore: int<Game.Score>) =
+    let bindCheckScore line (expectedScore: int<Game.P>) =
         fun (result:Game.State) ->
             try
                 Assert.AreEqual(expectedScore, result.score)
@@ -38,7 +38,7 @@ type Test() =
     // helper function
     let makeState b =
         {Game.board = b;
-         Game.score = 0<Score>
+         Game.score = 0<P>
          }
     
     [<Test>]
@@ -72,19 +72,19 @@ type Test() =
     [<Test>]
     member x.``Merge 2 and 2``() =
         let result = Game.merge 2<V> 2<V>
-        let expected = (4<V>, 0<V>, 4<Score>)
+        let expected = (4<V>, 0<V>, 4<P>)
         Assert.AreEqual (expected, result)
 
     [<Test>]
     member x.``Merge 2 and 8``() =
         let result = Game.merge 2<V> 8<V>
-        let expected = (2<V>, 8<V>, 0<Score>)
+        let expected = (2<V>, 8<V>, 0<P>)
         Assert.AreEqual (expected, result)
 
     [<Test>]
     member x.``Merge 0 and 2``() =
         let result = Game.merge 0<V> 2<V>
-        let expected = (0<V>, 2<V>, 0<Score>)
+        let expected = (0<V>, 2<V>, 0<P>)
         Assert.AreEqual (expected, result)
 
     [<Test>]
@@ -235,7 +235,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Up
-        |> bindCheckScore __LINE__ 4<Score> 
+        |> bindCheckScore __LINE__ 4<P> 
         |> bindCheckBoard __LINE__
             [|
                 [| 4<V>; 0<V>; 0<V>; 4<V>|]
@@ -244,7 +244,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Left
-        |> bindCheckScore __LINE__ 12<Score>
+        |> bindCheckScore __LINE__ 12<P>
         |> bindCheckBoard __LINE__
             [|
                 [| 8<V>; 0<V>; 0<V>; 0<V>|]
@@ -253,7 +253,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Down
-        |> bindCheckScore __LINE__ 12<Score>
+        |> bindCheckScore __LINE__ 12<P>
         |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
@@ -262,7 +262,7 @@ type Test() =
                 [| 2<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Right
-        |> bindCheckScore __LINE__ 12<Score>
+        |> bindCheckScore __LINE__ 12<P>
         |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
@@ -283,7 +283,7 @@ type Test() =
         Game.set b 0<R> 3<C> 4<V>
         b
         |> makeState
-        |> bindCheckScore __LINE__ 0<Score>
+        |> bindCheckScore __LINE__ 0<P>
         |> bindCheckBoard __LINE__
             [|
                 [| 2<V>; 0<V>; 0<V>; 4<V>|]
@@ -292,7 +292,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Right
-        |> bindCheckScore __LINE__ 12<Score>
+        |> bindCheckScore __LINE__ 12<P>
         |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 2<V>; 4<V>|]

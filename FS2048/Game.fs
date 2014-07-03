@@ -60,7 +60,6 @@ module Game =
                         i := !i + 1
                     let z = ref !i
                     while !z < 3  do
-                        printf " d %A\n" b
                         while !z < 3 && b.[!z].[c] = 0<V> do
                             z := (!z + 1)
                         b.[!i].[c] <- b.[!z].[c]
@@ -92,9 +91,7 @@ module Game =
                         i := (!i - 1)
     
     let move (b:Board) (direction:Move) =
-        printf "  m %A\n" b
         slide b direction
-        printf "  k %A\n" b
         (
         match direction with
          Up ->
@@ -130,5 +127,4 @@ module Game =
                     b.[r].[c]   <- x
                     b.[r].[c-1] <- y
         )
-        printf "  x %A\n" b
         slide b direction

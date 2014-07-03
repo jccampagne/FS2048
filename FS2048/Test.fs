@@ -91,13 +91,68 @@ type Test() =
             |]
         |> ignore
                 
+
+    [<Test>]
+    member x.``Simple Slide Up``() =
+        [|
+                [| 2<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 2<V>; 0<V>; 2<V>|]
+                [| 0<V>; 4<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 4<V>; 8<V>|]
+        |]
+        |> bindSlide Up
+        |> bindCheck __LINE__
+            [|
+                [| 2<V>; 2<V>; 4<V>; 2<V>|]
+                [| 0<V>; 4<V>; 0<V>; 8<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            |]
+        |> ignore
+
     [<Test>]
     member x.``Simple Slide Right``() =
+        [|
+                [| 2<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 2<V>; 0<V>; 2<V>|]
+                [| 0<V>; 4<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 4<V>; 8<V>|]
+        |]
+        |> bindSlide Right
+        |> bindCheck __LINE__
+            [|
+                [| 0<V>; 0<V>; 0<V>; 2<V>|]
+                [| 0<V>; 0<V>; 2<V>; 2<V>|]
+                [| 0<V>; 0<V>; 0<V>; 4<V>|]
+                [| 0<V>; 0<V>; 4<V>; 8<V>|]
+            |]
+        |> ignore
+            
+    [<Test>]
+    member x.``Simple Slide Down``() =
+        [|
+                [| 2<V>; 0<V>; 2<V>; 0<V>|]
+                [| 0<V>; 2<V>; 0<V>; 2<V>|]
+                [| 0<V>; 4<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 4<V>; 8<V>|]
+        |]
+        |> bindSlide Down
+        |> bindCheck __LINE__
+            [|
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 2<V>; 2<V>; 2<V>|]
+                [| 2<V>; 4<V>; 4<V>; 8<V>|]
+            |]
+        |> ignore
+
+    [<Test>]
+    member x.``Multiple Slides``() =
         [|
                 [| 4<V>; 4<V>; 0<V>; 2<V>|]
                 [| 0<V>; 0<V>; 2<V>; 0<V>|]
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 2<V>; 0<V>; 2<V>; 0<V>|]
         |]
         |> bindSlide Right
         |> bindCheck __LINE__
@@ -105,22 +160,22 @@ type Test() =
                 [| 0<V>; 4<V>; 4<V>; 2<V>|]
                 [| 0<V>; 0<V>; 0<V>; 2<V>|]
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 2<V>; 2<V>|]
             |]
         |> bindSlide Down
         |> bindCheck __LINE__
             [|
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 0<V>; 2<V>|]
-                [| 0<V>; 4<V>; 4<V>; 2<V>|]
+                [| 0<V>; 0<V>; 4<V>; 2<V>|]
+                [| 0<V>; 4<V>; 2<V>; 2<V>|]
             |]
         |> bindSlide Up
         |> bindCheck __LINE__
             [|
                 [| 0<V>; 4<V>; 4<V>; 2<V>|]
+                [| 0<V>; 0<V>; 2<V>; 2<V>|]
                 [| 0<V>; 0<V>; 0<V>; 2<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> ignore

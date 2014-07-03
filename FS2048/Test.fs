@@ -304,7 +304,8 @@ type Test() =
 
     [<Test>]
     member x.``has emtpy Cell``() =
-        let s = makeState [|
+        let s = makeState
+                            [|
                                 [| 0<V>; 0<V>; 2<V>; 4<V>|]
                                 [| 0<V>; 0<V>; 0<V>; 8<V>|]
                                 [| 0<V>; 0<V>; 0<V>; 4<V>|]

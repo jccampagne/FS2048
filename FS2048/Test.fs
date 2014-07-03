@@ -235,6 +235,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Up
+        |> bindCheckScore __LINE__ 4<Score> 
         |> bindCheckBoard __LINE__
             [|
                 [| 4<V>; 0<V>; 0<V>; 4<V>|]
@@ -243,6 +244,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Left
+        |> bindCheckScore __LINE__ 12<Score>
         |> bindCheckBoard __LINE__
             [|
                 [| 8<V>; 0<V>; 0<V>; 0<V>|]
@@ -251,6 +253,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Down
+        |> bindCheckScore __LINE__ 12<Score>
         |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
@@ -259,6 +262,7 @@ type Test() =
                 [| 2<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Right
+        |> bindCheckScore __LINE__ 12<Score>
         |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]

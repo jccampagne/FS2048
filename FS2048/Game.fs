@@ -12,6 +12,9 @@ module Game =
     [<Measure>]
     type V
 
+    [<Measure>]
+    type Score
+
     type Col = int<C>
     type Row = int<R>
     type Cval = int<V>
@@ -19,7 +22,7 @@ module Game =
     type Board = int<V> [] []
 
     type State = {board : Board;
-                  score : int}
+                  score : int<Score>}
 
     type Move = Up | Down | Left | Right
 
@@ -39,10 +42,11 @@ module Game =
         b.[i].[j] <- value
     
     let merge a b =
-        if a = b    then a+b, 0<V>
-        else               a,   b
+        if a = b    then a+b, 0<V>, ((a+b)/1<V>*1<Score>)
+        else               a,    b, 0<Score>  
 
-    let slide (b:Board) (direction:Move) =
+    let slide (g:State) (direction:Move) =
+        let b = g.board
         match direction with
             Left ->
                 for r in 0..3 do
@@ -92,42 +96,50 @@ module Game =
                         b.[!i].[c] <- b.[!z].[c]
                         b.[!z].[c] <- 0<V>
                         i := (!i - 1)
+        g
     
-    let move (b:Board) (direction:Move) =
-        slide b direction
-        (
-        match direction with
-         Up ->
-            for r in 0..2 do
-                for c in 0..3 do
-                    let u = b.[r].[c]
-                    let v = b.[r+1].[c]
-                    let (x, y) = merge u v
-                    b.[r]  .[c] <- x
-                    b.[r+1].[c] <- y
-        | Down  ->
-            for r in 3..-1..1 do
-                for c in 0..3 do
-                    let u = b.[r].[c]
-                    let v = b.[r-1].[c]
-                    let (x, y) = merge u v
-                    b.[r].[c]   <- x
-                    b.[r-1].[c] <- y
-        | Left  ->
-            for r in 0..3 do
-                for c in 0..2 do
-                    let u = b.[r].[c]
-                    let v = b.[r].[c+1]
-                    let (x, y) = merge u v
-                    b.[r].[c]   <- x
-                    b.[r].[c+1] <- y
-        | Right ->
-            for r in 0..3 do
-                for c in 3..-1..1 do
-                    let u = b.[r].[c]
-                    let v = b.[r].[c-1]
-                    let (x, y) = merge u v
-                    b.[r].[c]   <- x
-                    b.[r].[c-1] <- y
-        )
-        slide b direction
+    let move (g:State) (direction:Move) =
+        slide g direction
+        let b = g.board
+        let pointsAcc = (ref 0<Score>)
+        let points = (
+            match direction with
+             Up ->
+                for r in 0..2 do
+                    for c in 0..3 do
+                        let u = b.[r].[c]
+                        let v = b.[r+1].[c]
+                        let (x, y, points) = merge u v
+                        b.[r]  .[c] <- x
+                        b.[r+1].[c] <- y
+                        pointsAcc := !pointsAcc + points
+            | Down  ->
+                for r in 3..-1..1 do
+                    for c in 0..3 do
+                        let u = b.[r].[c]
+                        let v = b.[r-1].[c]
+                        let (x, y, points) = merge u v
+                        b.[r].[c]   <- x
+                        b.[r-1].[c] <- y
+                        pointsAcc := !pointsAcc + points
+            | Left  ->
+                for r in 0..3 do
+                    for c in 0..2 do
+                        let u = b.[r].[c]
+                        let v = b.[r].[c+1]
+                        let (x, y, points) = merge u v
+                        b.[r].[c]   <- x
+                        b.[r].[c+1] <- y
+                        pointsAcc := !pointsAcc + points
+            | Right ->
+                for r in 0..3 do
+                    for c in 3..-1..1 do
+                        let u = b.[r].[c]
+                        let v = b.[r].[c-1]
+                        let (x, y, points) = merge u v
+                        b.[r].[c]   <- x
+                        b.[r].[c-1] <- y
+                        pointsAcc := !pointsAcc + points
+            )
+        slide g direction
+        {g with score = g.score + !pointsAcc}

@@ -8,25 +8,29 @@ open Game
 type Test() =
 
     // helper function
-    let bindCheck line (expected: Game.Board) =
-        fun (result:Game.Board) ->
+    let bindCheckBoard line (expected: Game.Board) =
+        fun (result:Game.State) ->
             try
-                Assert.AreEqual(expected, result)
+                Assert.AreEqual(expected, result.board)
                 result
                 with ex ->
                     printf "bindCheck failed at line %s" line
                     raise ex
 
     // helper function
-    let bindSlide direction b =
-        Game.slide b direction
-        b
+    let bindSlide direction (g:Game.State) =
+        Game.slide g direction
 
     // helper function
-    let bindMove direction b =
-        Game.move b direction
-        b
-
+    let bindMove (direction:Game.Move) (g:Game.State) =
+        Game.move g direction
+    
+    // helper function
+    let makeState b =
+        {Game.board = b;
+         Game.score = 0<Score>
+         }
+    
     [<Test>]
     member x.``Init zero board``() =
         let result = Game.zeroBoard ()
@@ -58,19 +62,19 @@ type Test() =
     [<Test>]
     member x.``Merge 2 and 2``() =
         let result = Game.merge 2<V> 2<V>
-        let expected = (4<V>, 0<V>)
+        let expected = (4<V>, 0<V>, 4<Score>)
         Assert.AreEqual (expected, result)
 
     [<Test>]
     member x.``Merge 2 and 8``() =
         let result = Game.merge 2<V> 8<V>
-        let expected = (2<V>, 8<V>)
+        let expected = (2<V>, 8<V>, 0<Score>)
         Assert.AreEqual (expected, result)
 
     [<Test>]
     member x.``Merge 0 and 2``() =
         let result = Game.merge 0<V> 2<V>
-        let expected = (0<V>, 2<V>)
+        let expected = (0<V>, 2<V>, 0<Score>)
         Assert.AreEqual (expected, result)
 
     [<Test>]
@@ -81,8 +85,9 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
         |]
+        |> makeState
         |> bindSlide Left
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 4<V>; 4<V>; 2<V>; 0<V>|]
                 [| 2<V>; 0<V>; 0<V>; 0<V>|]
@@ -100,8 +105,9 @@ type Test() =
                 [| 0<V>; 4<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 4<V>; 8<V>|]
         |]
+        |> makeState
         |> bindSlide Up
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 2<V>; 2<V>; 4<V>; 2<V>|]
                 [| 0<V>; 4<V>; 0<V>; 8<V>|]
@@ -118,8 +124,9 @@ type Test() =
                 [| 0<V>; 4<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 4<V>; 8<V>|]
         |]
+        |> makeState
         |> bindSlide Right
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 0<V>; 2<V>|]
                 [| 0<V>; 0<V>; 2<V>; 2<V>|]
@@ -136,8 +143,9 @@ type Test() =
                 [| 0<V>; 4<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 4<V>; 8<V>|]
         |]
+        |> makeState
         |> bindSlide Down
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
@@ -154,8 +162,9 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 2<V>; 0<V>; 2<V>; 0<V>|]
         |]
+        |> makeState
         |> bindSlide Right
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 4<V>; 4<V>; 2<V>|]
                 [| 0<V>; 0<V>; 0<V>; 2<V>|]
@@ -163,7 +172,7 @@ type Test() =
                 [| 0<V>; 0<V>; 2<V>; 2<V>|]
             |]
         |> bindSlide Down
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 0<V>; 2<V>|]
@@ -171,7 +180,7 @@ type Test() =
                 [| 0<V>; 4<V>; 2<V>; 2<V>|]
             |]
         |> bindSlide Up
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 4<V>; 4<V>; 2<V>|]
                 [| 0<V>; 0<V>; 2<V>; 2<V>|]
@@ -188,8 +197,9 @@ type Test() =
                 [| 2<V>; 2<V>; 2<V>; 2<V>|]
                 [| 0<V>; 2<V>; 2<V>; 4<V>|]
         |]
+        |> makeState
         |> bindMove Left
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 8<V>; 4<V>; 0<V>; 0<V>|]
                 [| 4<V>; 4<V>; 0<V>; 0<V>|]
@@ -206,7 +216,8 @@ type Test() =
         Game.set b 2<R> 0<C> 2<V>
         Game.set b 0<R> 3<C> 4<V>
         b
-        |> bindCheck __LINE__
+        |> makeState
+        |> bindCheckBoard __LINE__
             [|
                 [| 2<V>; 0<V>; 0<V>; 4<V>|]
                 [| 2<V>; 0<V>; 0<V>; 0<V>|]
@@ -214,7 +225,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Up
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 4<V>; 0<V>; 0<V>; 4<V>|]
                 [| 2<V>; 0<V>; 0<V>; 0<V>|]
@@ -222,7 +233,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Left
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 8<V>; 0<V>; 0<V>; 0<V>|]
                 [| 2<V>; 0<V>; 0<V>; 0<V>|]
@@ -230,7 +241,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Down
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
@@ -238,7 +249,7 @@ type Test() =
                 [| 2<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Right
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
@@ -257,7 +268,8 @@ type Test() =
         Game.set b 1<R> 2<C> 4<V>
         Game.set b 0<R> 3<C> 4<V>
         b
-        |> bindCheck __LINE__
+        |> makeState
+        |> bindCheckBoard __LINE__
             [|
                 [| 2<V>; 0<V>; 0<V>; 4<V>|]
                 [| 4<V>; 0<V>; 4<V>; 0<V>|]
@@ -265,7 +277,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Right
-        |> bindCheck __LINE__
+        |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 2<V>; 4<V>|]
                 [| 0<V>; 0<V>; 0<V>; 8<V>|]

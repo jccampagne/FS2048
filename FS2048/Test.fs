@@ -16,6 +16,15 @@ type Test() =
                 with ex ->
                     printf "bindCheck failed at line %s" line
                     raise ex
+    // helper function
+    let bindCheckScore line (expectedScore: int<Game.Score>) =
+        fun (result:Game.State) ->
+            try
+                Assert.AreEqual(expectedScore, result.score)
+                result
+                with ex ->
+                    printf "bindCheck failed at line %s" line
+                    raise ex
 
     // helper function
     let bindSlide direction (g:Game.State) =
@@ -270,6 +279,7 @@ type Test() =
         Game.set b 0<R> 3<C> 4<V>
         b
         |> makeState
+        |> bindCheckScore __LINE__ 0<Score>
         |> bindCheckBoard __LINE__
             [|
                 [| 2<V>; 0<V>; 0<V>; 4<V>|]
@@ -278,6 +288,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Right
+        |> bindCheckScore __LINE__ 12<Score>
         |> bindCheckBoard __LINE__
             [|
                 [| 0<V>; 0<V>; 2<V>; 4<V>|]

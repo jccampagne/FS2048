@@ -18,6 +18,9 @@ module Game =
 
     type Board = int<V> [] []
 
+    type State = {board : Board;
+                  score : int}
+
     type Move = Up | Down | Left | Right
 
     let zeroBoard () =

@@ -303,7 +303,7 @@ type Test() =
         |> ignore
 
     [<Test>]
-    member x.``has emtpy Cell``() =
+    member x.``has empty Cell``() =
         let s = makeState
                             [|
                                 [| 0<V>; 0<V>; 2<V>; 4<V>|]
@@ -314,7 +314,7 @@ type Test() =
         Assert.IsTrue (hasEmptyCell s)
 
     [<Test>]
-    member x.``has no emtpy cell``() =
+    member x.``has no empty cell``() =
         let s = makeState
                             [|
                                 [| 2<V>; 2<V>; 2<V>; 4<V>|]

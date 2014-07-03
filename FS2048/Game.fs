@@ -38,6 +38,12 @@ module Game =
             [| 0<V>; 0<V>; 0<V>; 0<V>|]
          |]
 
+    let deepCopy a =
+        let b = Array.copy a
+        for i in 0..(Array.length a - 1) do
+            b.[i] <- Array.copy (a.[i])
+        b
+
     let int_of_row (row:Row) = row / 1<R>
     let int_of_col (col:Col) = col / 1<C>
 
@@ -160,5 +166,27 @@ module Game =
             | Some (_) -> true
         )
 
+    let hasChanged a b =
+        not ( a = b )
+
+
+    let cartesian xs ys = 
+        xs |> List.collect (fun x -> ys |> List.map (fun y -> [x; y]))
+
     let hasMergeableCell (g:State) =
-        failwith "hasMergeableCell not implemented"
+        printf "================\n"
+        printf "before test: %A\n" g
+        let dirs = [Left; Right; Up; Down]
+        let dirs2 = cartesian dirs dirs
+        let applySteps gg moves =
+            let h = {gg with board = deepCopy g.board}
+            let hh = List.fold (fun s dir -> move s dir) h moves
+            printf "  in test: gg  = %A\n" gg
+            printf "  in test: h  = %A\n" h
+            printf "  in test: hh = %A\n" hh
+            let hasChanged = gg.board <> hh.board
+            printf "   hasChanged   : %A\n" hasChanged
+            hasChanged
+        let changerMove = Seq.tryFind (applySteps g) dirs2
+        printf "  after test: g  = %A\n" g
+        changerMove <> None

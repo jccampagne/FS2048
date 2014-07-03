@@ -302,6 +302,22 @@ type Test() =
             |]
         |> ignore
 
+
+    [<Test>]
+    member x.``board has changed``() =
+        let s0 = makeState
+                            [|
+                                [| 0<V>; 0<V>; 2<V>; 4<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 8<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 4<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                            |]
+        let s1 = move s0 Left
+        let s2 = move s1 Left
+        Assert.AreEqual (s1.board, s2.board)
+
+
+
     [<Test>]
     member x.``has empty Cell``() =
         let s = makeState
@@ -355,7 +371,7 @@ type Test() =
                                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                             |]
-        Assert.IsFalse (hasMergeableCell s)
+        Assert.IsTrue (hasMergeableCell s)
 
     [<Test>]
     member x.``has mergeable cells in 2 moves simple``() =

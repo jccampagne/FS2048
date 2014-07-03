@@ -134,7 +134,7 @@ type Test() =
                 [| 0<V>; 2<V>; 2<V>; 4<V>|]
         |]
         |> bindMove Left
-        |> bindCheck  __LINE__
+        |> bindCheck __LINE__
             [|
                 [| 8<V>; 4<V>; 0<V>; 0<V>|]
                 [| 4<V>; 4<V>; 0<V>; 0<V>|]
@@ -151,7 +151,7 @@ type Test() =
         Game.set b 2<R> 0<C> 2<V>
         Game.set b 0<R> 3<C> 4<V>
         b
-        |> bindCheck  __LINE__
+        |> bindCheck __LINE__
             [|
                 [| 2<V>; 0<V>; 0<V>; 4<V>|]
                 [| 2<V>; 0<V>; 0<V>; 0<V>|]

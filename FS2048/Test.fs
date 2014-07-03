@@ -6,6 +6,14 @@ open Game
 
 [<TestFixture>]
 type Test() = 
+    let bindCheck (expected: Game.Board) =
+        fun (result:Game.Board) ->
+            Assert.AreEqual(expected, result)
+            result
+
+    let bindSlide direction b =
+        Game.slide b direction
+        b
 
     [<Test>]
     member x.``Init zero board``() =
@@ -53,68 +61,56 @@ type Test() =
         let expected = (0<V>, 2<V>)
         Assert.AreEqual (expected, result)
 
-    
-
     [<Test>]
     member x.``Simple Slide Left``() =
-        let b = 
-            [|
-                [| 4<V>; 4<V>; 0<V>; 2<V>|]
-                [| 0<V>; 0<V>; 2<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
-            |]
-        Game.slide b Left
-        let expected = 
-            [|
-                [| 4<V>; 4<V>; 2<V>; 0<V>|]
-                [| 2<V>; 0<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
-            |]
-        printf "%A" b
-        Assert.AreEqual(expected, b)
-    
+        [|
+            [| 4<V>; 4<V>; 0<V>; 2<V>|]
+            [| 0<V>; 0<V>; 2<V>; 0<V>|]
+            [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            [| 0<V>; 0<V>; 0<V>; 0<V>|]
+        |]
+        |> bindSlide Left
+        |> bindCheck [|
+                        [| 4<V>; 4<V>; 2<V>; 0<V>|]
+                        [| 2<V>; 0<V>; 0<V>; 0<V>|]
+                        [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                        [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                    |]
+        |> ignore
+                
     [<Test>]
     member x.``Simple Slide Right``() =
-        let b = 
-            [|
-                [| 4<V>; 4<V>; 0<V>; 2<V>|]
-                [| 0<V>; 0<V>; 2<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
-            |]
-        Game.slide b Right
-        let expected = 
-            [|
-                [| 0<V>; 4<V>; 4<V>; 2<V>|]
-                [| 0<V>; 0<V>; 0<V>; 2<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
-            |]
-        Assert.AreEqual(expected, b)
-
-        Game.slide b Down
-        let expected = 
-            [|
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 0<V>|]
-                [| 0<V>; 0<V>; 0<V>; 2<V>|]
-                [| 0<V>; 4<V>; 4<V>; 2<V>|]
-            |]
-        Assert.AreEqual(expected, b)
-
-        Game.slide b Up
-        let expected = 
+        [|
+            [| 4<V>; 4<V>; 0<V>; 2<V>|]
+            [| 0<V>; 0<V>; 2<V>; 0<V>|]
+            [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            [| 0<V>; 0<V>; 0<V>; 0<V>|]
+        |]
+        |> bindSlide Right
+        |> bindCheck
             [|
                 [| 0<V>; 4<V>; 4<V>; 2<V>|]
                 [| 0<V>; 0<V>; 0<V>; 2<V>|]
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
-        printf " r %A" b
-        Assert.AreEqual(expected, b)
-
+        |> bindSlide Down
+        |> bindCheck  
+            [|
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 2<V>|]
+                [| 0<V>; 4<V>; 4<V>; 2<V>|]
+            |]
+        |> bindSlide Up
+        |> bindCheck
+            [|
+                [| 0<V>; 4<V>; 4<V>; 2<V>|]
+                [| 0<V>; 0<V>; 0<V>; 2<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+            |]
+        |> ignore
 
     [<Test>]
     member x.``Simple Move 0``() =

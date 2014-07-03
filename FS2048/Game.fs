@@ -96,7 +96,6 @@ module Game =
                         b.[!i].[c] <- b.[!z].[c]
                         b.[!z].[c] <- 0<V>
                         i := (!i - 1)
-        g
     
     let move (g:State) (direction:Move) =
         slide g direction

@@ -20,6 +20,7 @@ type Test() =
     // helper function
     let bindSlide direction (g:Game.State) =
         Game.slide g direction
+        g
 
     // helper function
     let bindMove (direction:Game.Move) (g:Game.State) =

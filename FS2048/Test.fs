@@ -324,3 +324,62 @@ type Test() =
                             |]
         Assert.IsFalse (hasEmptyCell s)
 
+    [<Test>]
+    member x.``has mergeable cell``() =
+        let s = makeState
+                            [|
+                                [| 2<V>; 2<V>; 2<V>; 4<V>|]
+                                [| 2<V>; 2<V>; 2<V>; 8<V>|]
+                                [| 2<V>; 2<V>; 2<V>; 4<V>|]
+                                [| 2<V>; 2<V>; 2<V>; 2<V>|]
+                            |]
+        Assert.IsTrue (hasMergeableCell s)
+
+    [<Test>]
+    member x.``only zeros are not mergeable``() =
+        let s = makeState
+                            [|
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                            |]
+        Assert.IsFalse (hasMergeableCell s)
+
+    [<Test>]
+    member x.``has mergeable cells in one move``() =
+        let s = makeState
+                            [|
+                                [| 2<V>; 0<V>; 2<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                            |]
+        Assert.IsFalse (hasMergeableCell s)
+
+    [<Test>]
+    member x.``has mergeable cells in 2 moves simple``() =
+        let s = makeState
+                            [|
+                                [| 2<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 2<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                            |]
+        Assert.IsTrue (hasMergeableCell s)
+
+    [<Test>]
+    member x.``has mergeable cells in 2 moves tricky``() =
+        (* should be able to merge with, eg:
+             - Left, Up;
+             - Right, Top.
+           but not with: Up, Left. This will block the game.
+        *)
+        let s = makeState
+                            [|
+                                [| 2<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 4<V>; 2<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                            |]
+        Assert.IsTrue (hasMergeableCell s)

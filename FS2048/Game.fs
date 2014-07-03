@@ -158,4 +158,7 @@ module Game =
         (match result with
             | None -> false
             | Some (_) -> true
-            )
+        )
+
+    let hasMergeableCell (g:State) =
+        failwith "hasMergeableCell not implemented"

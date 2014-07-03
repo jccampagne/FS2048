@@ -171,22 +171,15 @@ module Game =
 
 
     let cartesian xs ys = 
-        xs |> List.collect (fun x -> ys |> List.map (fun y -> [x; y]))
+        xs |> List.collect (fun x -> ys |> List.map (fun y -> (x@y)))
 
     let hasMergeableCell (g:State) =
-        printf "================\n"
-        printf "before test: %A\n" g
-        let dirs = [Left; Right; Up; Down]
+        let dirs = [[Left]; [Right]; [Up]; [Down]]
         let dirs2 = cartesian dirs dirs
-        let applySteps gg moves =
-            let h = {gg with board = deepCopy g.board}
+        let applySteps moves =
+            let h = {g with board = deepCopy g.board}
             let hh = List.fold (fun s dir -> move s dir) h moves
-            printf "  in test: gg  = %A\n" gg
-            printf "  in test: h  = %A\n" h
-            printf "  in test: hh = %A\n" hh
-            let hasChanged = gg.board <> hh.board
-            printf "   hasChanged   : %A\n" hasChanged
+            let hasChanged = g.score <> hh.score
             hasChanged
-        let changerMove = Seq.tryFind (applySteps g) dirs2
-        printf "  after test: g  = %A\n" g
+        let changerMove = Seq.tryFind applySteps dirs2
         changerMove <> None

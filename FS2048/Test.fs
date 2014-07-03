@@ -363,6 +363,17 @@ type Test() =
         Assert.IsFalse (hasMergeableCell s)
 
     [<Test>]
+    member x.``Lone cell is not mergeable``() =
+        let s = makeState
+                            [|
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 2<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                            |]
+        Assert.IsFalse (hasMergeableCell s)
+
+    [<Test>]
     member x.``has mergeable cells in one move``() =
         let s = makeState
                             [|

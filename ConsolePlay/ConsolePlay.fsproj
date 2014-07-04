@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CD768F61-EA82-411E-9E14-82CC5EB42592}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>FS2048</RootNamespace>
-    <AssemblyName>FS2048</AssemblyName>
+    <ProjectGuid>{14B9A31A-7E46-4470-9FE6-114FEB3763CA}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ConsolePlay</RootNamespace>
+    <AssemblyName>ConsolePlay</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -15,7 +15,7 @@
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <ConsolePause>false</ConsolePause>
+    <Externalconsole>true</Externalconsole>
     <Tailcalls>false</Tailcalls>
     <PlatformTarget>
     </PlatformTarget>
@@ -28,7 +28,7 @@
     <ErrorReport>prompt</ErrorReport>
     <PlatformTarget>
     </PlatformTarget>
-    <ConsolePause>false</ConsolePause>
+    <Externalconsole>true</Externalconsole>
     <Tailcalls>true</Tailcalls>
   </PropertyGroup>
   <ItemGroup>
@@ -36,12 +36,14 @@
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="nunit.framework" />
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game.fs" />
-    <Compile Include="Player.fs" />
-    <Compile Include="Test.fs" />
+    <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="..\FS2048\Game.fs">
+      <Link>Game.fs</Link>
+    </Compile>
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
 </Project>

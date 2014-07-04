@@ -419,6 +419,7 @@ type Test() =
                                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                             |]
+        let s = {s with random = fun _ -> 0 }
         let s1 = setRandomCell s
         Assert.IsTrue (hasEmptyCell s1)
         s1
@@ -437,4 +438,48 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                 [| 0<V>; 0<V>; 2<V>; 2<V>|]
             |]
+        |> setRandomCell
+        |> setRandomCell
+
+        |> setRandomCell |> setRandomCell |> setRandomCell |> setRandomCell
+        |> setRandomCell |> setRandomCell |> setRandomCell |> setRandomCell
+        |> bindCheckBoard __LINE__
+            [|
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 2<V>; 2<V>; 2<V>; 2<V>|]
+                [| 2<V>; 2<V>; 2<V>; 2<V>|]
+                [| 2<V>; 2<V>; 2<V>; 2<V>|]
+            |]
+        |> setRandomCell |> setRandomCell |> setRandomCell |> setRandomCell
+        |> bindCheckBoard __LINE__
+            [|
+                [| 2<V>; 2<V>; 2<V>; 2<V>|]
+                [| 2<V>; 2<V>; 2<V>; 2<V>|]
+                [| 2<V>; 2<V>; 2<V>; 2<V>|]
+                [| 2<V>; 2<V>; 2<V>; 2<V>|]
+            |]
+        |> fun g -> try setRandomCell g with _ -> g
+        |> ignore
+
+
+    [<Test>]
+    member x.``fail from play``() =
+        let s = makeState
+                            [|
+                                [|0<V>; 0<V>; 0<V>; 0<V>|]
+                                [|0<V>; 0<V>; 0<V>; 0<V>|]
+                                [|0<V>; 0<V>; 0<V>; 0<V>|]
+                                [|0<V>; 2<V>; 2<V>; 8<V>|]
+                            |]
+        s
+        |> bindMove Right
+        |> bindCheckScore __LINE__ 4<P>
+        |> fun x -> printf "%A" x ; x
+        |> bindCheckBoard __LINE__
+                            [|
+                                [|0<V>; 0<V>; 0<V>; 0<V>|]
+                                [|0<V>; 0<V>; 0<V>; 0<V>|]
+                                [|0<V>; 0<V>; 0<V>; 0<V>|]
+                                [|0<V>; 0<V>; 4<V>; 8<V>|]
+                            |]
         |> ignore

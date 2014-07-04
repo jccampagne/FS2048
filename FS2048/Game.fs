@@ -30,6 +30,9 @@ module Game =
                   score : Score;
                   random : int -> int}
 
+    type Status =   GameOver     of State
+                  | GameContinue of State
+
     type Move = Up | Down | Left | Right
 
     let zeroBoard () =
@@ -38,12 +41,6 @@ module Game =
             [| 0<V>; 0<V>; 0<V>; 0<V>|]
             [| 0<V>; 0<V>; 0<V>; 0<V>|]
          |]
-
-    let init () =
-        {board = zeroBoard ();
-         score = 0<P>;
-         random = fun n -> 0 // always return 0 temporarily, for test.
-        }
 
     let deepCopy a =
         let b = Array.copy a
@@ -208,3 +205,20 @@ module Game =
                               let v = randomCellValue g
                               g.board.[r].[c] <- v
         g
+    
+    let init () =
+        setRandomCell {board = zeroBoard ();
+         score = 0<P>;
+         random = fun n -> 0 // always return 0 temporarily, for test.
+        }
+
+
+    let play (g:State) (m:Move) =
+        let gMoved = move g m
+        if not (hasEmptyCell gMoved)
+        then GameOver gMoved
+        else let gCell = setRandomCell gMoved
+             if hasMergeableCell gCell || hasEmptyCell gCell
+             then GameContinue gCell
+             else printfn "no mergeable cells : \n%A\n" gCell
+                  GameOver gCell

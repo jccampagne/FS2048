@@ -35,6 +35,8 @@ module Game =
 
     type Move = Up | Down | Left | Right
 
+    type Player = State -> Move
+
     let zeroBoard () =
          [| [| 0<V>; 0<V>; 0<V>; 0<V>|]
             [| 0<V>; 0<V>; 0<V>; 0<V>|]
@@ -226,3 +228,9 @@ module Game =
              then GameContinue gCell
              else printfn "no mergeable cells : \n%A\n" gCell
                   GameOver gCell
+
+    let rec loop (g:State) (player:Player) =
+        let move = player g
+        match play g move with
+            | GameOver h -> ()
+            | GameContinue h -> loop h player

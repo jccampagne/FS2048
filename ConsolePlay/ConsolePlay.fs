@@ -1,5 +1,7 @@
 ﻿namespace FS2048
 
+open System
+
 module ConsolePlay =
     let keyToMove k =
         match k with
@@ -8,7 +10,6 @@ module ConsolePlay =
             | System.ConsoleKey.UpArrow    -> Some FS2048.Game.Up
             | System.ConsoleKey.RightArrow -> Some FS2048.Game.Right
             | _ -> None
-            
 
     let displayGame (g:Game.State) =
         let b = g.board
@@ -16,8 +17,8 @@ module ConsolePlay =
             printf "%A\n" i
         printfn "score = %A" g.score
         printfn "---------------------------"
-
-    let rec getMove g =
+    
+    let rec getMove (g:Game.State) =
         displayGame g
         let keyInfo = System.Console.ReadKey ()
         printfn " key  = %A" keyInfo.Key

@@ -23,22 +23,15 @@ module AutoMax2Console =
       //  (h.score, List.head(ml))
         (h.score, ml)
 
-    let displayGame (g:Game.State) =
-        let b = g.board
-        for i in b do
-            printf "%A\n" i
-        printfn "score = %A" g.score
-        printfn "---------------------------"
-    
     let getMaxMove (g:Game.State) =
         let evals = List.map (evaluateMovesSeq g) movesSeq
         let sorted = List.sortWith compare evals
-        printfn "sorted 2 =\n %A" sorted
+      //  printfn "sorted 2 =\n %A" sorted
         let (_, m) = List.head sorted
         List.head m
 
     let rec getMove (g:Game.State) =
-        displayGame g
+        Game.displayGame g
         let move = getMaxMove g
         printfn " move  = %A" move
         printfn "---------------------------"

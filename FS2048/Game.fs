@@ -229,12 +229,18 @@ module Game =
         else let gCell = setRandomCell gMoved
              if hasMergeableCell gCell || hasEmptyCell gCell
              then GameContinue gCell
-             else printfn "no mergeable cells : \n%A\n" gCell
-                  GameOver gCell
+             else GameOver gCell
+
+    let displayGame (g:State) =
+        let b = g.board
+        for i in b do
+            printf "%A\n" i
+        printfn "score = %A" g.score
+        printfn "---------------------------"
 
     let rec loop (g:State) (player:Player) =
         let gg = cloneGame g
         let move = player gg
         match play g move with
-            | GameOver h -> ()
+            | GameOver h -> h
             | GameContinue h -> loop h player

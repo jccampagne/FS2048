@@ -11,15 +11,8 @@ module AutoConsole =
             let i = r.Next(count)
             List.nth moves i
 
-    let displayGame (g:Game.State) =
-        let b = g.board
-        for i in b do
-            printf "%A\n" i
-        printfn "score = %A" g.score
-        printfn "---------------------------"
-    
     let rec getMove (g:Game.State) =
-        displayGame g
+        Game.displayGame g
         let move = randomMove ()
         printfn " move  = %A" move
         move

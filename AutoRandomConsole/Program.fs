@@ -9,7 +9,8 @@ let main argv =
                 |> Game.setRandomCell
     //let player = AutoMaxConsole.getMove
     let player = AutoMax2Console.getMove
-    Game.loop g player
+    let endGame = Game.loop g player
+    Game.displayGame endGame
     0
 
     

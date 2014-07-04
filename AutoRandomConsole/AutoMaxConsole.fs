@@ -9,13 +9,6 @@ module AutoMaxConsole =
         let h = Game.move g m
         (h.score, m)
 
-    let displayGame (g:Game.State) =
-        let b = g.board
-        for i in b do
-            printf "%A\n" i
-        printfn "score = %A" g.score
-        printfn "---------------------------"
-    
     let getMaxMove (g:Game.State) =
         let evals = List.map (evaluateMove g) moves
         let sorted = List.rev (List.sort evals)
@@ -24,7 +17,7 @@ module AutoMaxConsole =
         m
 
     let rec getMove (g:Game.State) =
-        displayGame g
+        Game.displayGame g
         let move = getMaxMove g
         printfn " move  = %A" move
         move

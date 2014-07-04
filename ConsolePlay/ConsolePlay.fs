@@ -10,16 +10,9 @@ module ConsolePlay =
             | System.ConsoleKey.UpArrow    -> Some FS2048.Game.Up
             | System.ConsoleKey.RightArrow -> Some FS2048.Game.Right
             | _ -> None
-
-    let displayGame (g:Game.State) =
-        let b = g.board
-        for i in b do
-            printf "%A\n" i
-        printfn "score = %A" g.score
-        printfn "---------------------------"
-    
+                
     let rec getMove (g:Game.State) =
-        displayGame g
+        Game.displayGame g
         let keyInfo = System.Console.ReadKey ()
         printfn " key  = %A" keyInfo.Key
         match keyToMove keyInfo.Key with

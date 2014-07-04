@@ -19,16 +19,16 @@ let displayGame (g:Game.State) =
     printfn "score = %A" g.score
     printfn "---------------------------"
 
-let rec getMove () =
+let rec getMove g =
+    displayGame g
     let keyInfo = System.Console.ReadKey ()
     printfn " key  = %A" keyInfo.Key
     match keyToMove keyInfo.Key with
         | Some k -> k
-        | None -> getMove ()
+        | None -> getMove g
 
 let rec loop g =
-    displayGame g
-    let move = getMove ()
+    let move = getMove g
     match Game.play g move with
     | Game.GameOver h -> ()
     | Game.GameContinue h -> loop h

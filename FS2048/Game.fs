@@ -2,7 +2,7 @@
 
 
 module Game =
-    
+
     // Column
     [<Measure>]
     type C
@@ -27,7 +27,8 @@ module Game =
     type Score = int<P>
 
     type State = {board : Board;
-                  score : Score}
+                  score : Score;
+                  random : int -> int}
 
     type Move = Up | Down | Left | Right
 
@@ -37,6 +38,12 @@ module Game =
             [| 0<V>; 0<V>; 0<V>; 0<V>|]
             [| 0<V>; 0<V>; 0<V>; 0<V>|]
          |]
+
+    let init () =
+        {board = zeroBoard ();
+         score = 0<P>;
+         random = fun n -> 0 // always return 0 temporarily, for test.
+        }
 
     let deepCopy a =
         let b = Array.copy a
@@ -51,10 +58,10 @@ module Game =
         let i = int_of_row(row)
         let j = int_of_col(col)
         b.[i].[j] <- value
-    
+
     let merge a b =
         if a = b then a+b, 0<V>, ((a + b) / 1<V> * 1<P>)
-        else          a,      b,                   0<P>  
+        else          a,      b,                   0<P>
 
     let slide (g:State) (direction:Move) =
         let b = g.board
@@ -107,7 +114,7 @@ module Game =
                         b.[!i].[c] <- b.[!z].[c]
                         b.[!z].[c] <- 0<V>
                         i := (!i - 1)
-    
+
     let move (g:State) (direction:Move) =
         slide g direction
         let b = g.board
@@ -161,12 +168,11 @@ module Game =
                 | None -> false
                 | Some _ -> true
         let result = Seq.tryFind findRow g.board
-        (match result with
+        match result with
             | None -> false
             | Some (_) -> true
-        )
 
-    let cartesian xs ys = 
+    let cartesian xs ys =
         xs |> List.collect (fun x -> ys |> List.map (fun y -> (x@y)))
 
     let hasMergeableCell (g:State) =
@@ -179,3 +185,26 @@ module Game =
             hasChanged
         let changerMove = Seq.tryFind applySteps dirs2
         changerMove <> None
+
+    let freeCells (g:State) =
+        let count = ref 0
+        let freeCells = ref []
+        for r in 0..3 do
+            for c in 0..3 do
+                if g.board.[r].[c] = 0<V>
+                then freeCells := (r,c) :: !freeCells
+                     count := !count + 1
+                else ()
+        (!count, !freeCells)
+
+    let randomCellValue (g:State) =
+        2<V> // return 2 always, temporarily for test
+
+    let setRandomCell (g:State) =
+        match freeCells g with
+            | (0, []) -> failwith "No free cells"
+            | count, cells -> let r = g.random(count)
+                              let r, c = List.nth cells r
+                              let v = randomCellValue g
+                              g.board.[r].[c] <- v
+        g

@@ -34,13 +34,12 @@ type Test() =
     // helper function
     let bindMove (direction:Game.Move) (g:Game.State) =
         Game.move g direction
-    
+
     // helper function
     let makeState b =
-        {Game.board = b;
-         Game.score = 0<P>
-         }
-    
+        let g = Game.init ()
+        {g with board = b}
+
     [<Test>]
     member x.``Init zero board``() =
         let result = Game.zeroBoard ()
@@ -51,7 +50,7 @@ type Test() =
                           [| 0<V>;      0<V>;      0<V>;      0<V>     |] // V or Game.V works
                        |]
         Assert.AreEqual (result, expected)
-    
+
     [<Test>]
     member x.``Set test``() =
         let b = Game.zeroBoard ()
@@ -68,7 +67,7 @@ type Test() =
     member x.``Bounds check``() =
         let b = Game.zeroBoard ()
         Game.set b 0<R> 10<C> 4<V>
-       
+
     [<Test>]
     member x.``Merge 2 and 2``() =
         let result = Game.merge 2<V> 2<V>
@@ -105,7 +104,6 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> ignore
-                
 
     [<Test>]
     member x.``Simple Slide Up``() =
@@ -144,7 +142,7 @@ type Test() =
                 [| 0<V>; 0<V>; 4<V>; 8<V>|]
             |]
         |> ignore
-            
+
     [<Test>]
     member x.``Simple Slide Down``() =
         [|
@@ -235,7 +233,7 @@ type Test() =
                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
             |]
         |> bindMove Up
-        |> bindCheckScore __LINE__ 4<P> 
+        |> bindCheckScore __LINE__ 4<P>
         |> bindCheckBoard __LINE__
             [|
                 [| 4<V>; 0<V>; 0<V>; 4<V>|]
@@ -410,3 +408,33 @@ type Test() =
                                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                             |]
         Assert.IsTrue (hasMergeableCell s)
+
+
+    [<Test>]
+    member x.``set new cell``() =
+        let s = makeState
+                            [|
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                            |]
+        let s1 = setRandomCell s
+        Assert.IsTrue (hasEmptyCell s1)
+        s1
+        |> bindCheckBoard __LINE__
+            [|
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 2<V>|]
+            |]
+        |> setRandomCell
+        |> bindCheckBoard __LINE__
+            [|
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 0<V>; 0<V>|]
+                [| 0<V>; 0<V>; 2<V>; 2<V>|]
+            |]
+        |> ignore

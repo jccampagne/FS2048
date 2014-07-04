@@ -2,7 +2,6 @@
 
 [<EntryPoint>]
 let main argv = 
-    printfn "%A" argv
     let g = Game.init ()
                 |> Game.setRandomCell
                 |> Game.setRandomCell
@@ -10,7 +9,7 @@ let main argv =
     //let player = AutoMaxConsole.getMove
     let player = AutoMax2Console.getMove
     let endGame = Game.loop g player
-    Game.displayGame endGame
+  /////////////  Game.displayGame endGame
+    printfn "%d, %d" ((Game.biggestCell endGame) / 1<Game.V>) (endGame.score / 1<Game.P>)
     0
 
-    

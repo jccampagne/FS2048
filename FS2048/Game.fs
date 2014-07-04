@@ -174,6 +174,17 @@ module Game =
             | None -> false
             | Some (_) -> true
 
+
+    let biggestCell (g:State) =
+        let biggest = ref 0<V>
+        for r in 0..3 do
+            for c in 0..3 do
+                let v = g.board.[r].[c]
+                if v > !biggest
+                then biggest := v
+                else ()
+        !biggest
+
     let cartesian xs ys =
         xs |> List.collect (fun x -> ys |> List.map (fun y -> (x@y)))
 

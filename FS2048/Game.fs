@@ -50,6 +50,9 @@ module Game =
             b.[i] <- Array.copy (a.[i])
         b
 
+    let cloneGame g =
+        {g with board = deepCopy g.board}
+
     let int_of_row (row:Row) = row / 1<R>
     let int_of_col (col:Col) = col / 1<C>
 
@@ -178,7 +181,7 @@ module Game =
         let dirs = [[Left]; [Right]; [Up]; [Down]]
         let dirs2 = cartesian dirs dirs
         let applySteps moves =
-            let h = {g with board = deepCopy g.board}
+            let h = cloneGame g
             let hh = List.fold (fun s dir -> move s dir) h moves
             let hasChanged = g.score <> hh.score
             hasChanged
@@ -230,7 +233,8 @@ module Game =
                   GameOver gCell
 
     let rec loop (g:State) (player:Player) =
-        let move = player g
+        let gg = cloneGame g
+        let move = player gg
         match play g move with
             | GameOver h -> ()
             | GameContinue h -> loop h player

@@ -7,7 +7,8 @@ let main argv =
                 |> Game.setRandomCell
                 |> Game.setRandomCell
                 |> Game.setRandomCell
-    let player = AutoMaxConsole.getMove
+    //let player = AutoMaxConsole.getMove
+    let player = AutoMax2Console.getMove
     Game.loop g player
     0
 

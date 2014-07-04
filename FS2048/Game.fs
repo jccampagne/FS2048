@@ -206,10 +206,14 @@ module Game =
                               g.board.[r].[c] <- v
         g
     
+
     let init () =
+        let r = new System.Random ()
+        let randomer = fun n -> r.Next(n)
         setRandomCell {board = zeroBoard ();
-         score = 0<P>;
-         random = fun n -> 0 // always return 0 temporarily, for test.
+                       score = 0<P>;
+                       random = randomer
+                       //random = fun n -> 0 // always return 0 temporarily, for test.
         }
 
 

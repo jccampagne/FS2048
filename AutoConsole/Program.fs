@@ -1,8 +1,14 @@
-﻿// Learn more about F# at http://fsharp.net
-// See the 'F# Tutorial' project for more help.
+﻿open FS2048
 
 [<EntryPoint>]
 let main argv = 
     printfn "%A" argv
-    0 // return an integer exit code
+    let g = Game.init ()
+                |> Game.setRandomCell
+                |> Game.setRandomCell
+                |> Game.setRandomCell
+    let player = AutoConsole.getMove
+    Game.loop g player
+    0
 
+    

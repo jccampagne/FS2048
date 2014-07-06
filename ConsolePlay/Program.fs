@@ -8,6 +8,7 @@ let main argv =
                 |> Game.setRandomCell
                 |> Game.setRandomCell
     let player = ConsolePlay.getMove
-    Game.loop g player
+    let endGame = Game.loop g player
+    printfn "%d, %d" ((Game.biggestCell endGame) / 1<Game.V>) (endGame.score / 1<Game.P>)
     0
 

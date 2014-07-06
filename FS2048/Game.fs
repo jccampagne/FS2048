@@ -235,17 +235,23 @@ module Game =
 
     let play (g:State) (m:Move) =
         let gMoved = move g m
-        if not (hasEmptyCell gMoved)
-        then GameOver gMoved
-        else let gCell = setRandomCell gMoved
-             if hasMergeableCell gCell || hasEmptyCell gCell
-             then GameContinue gCell
-             else GameOver gCell
+        let gCell =
+            if hasEmptyCell gMoved
+            then setRandomCell gMoved
+            else gMoved
+        if hasMergeableCell gCell || hasEmptyCell gCell
+        then GameContinue gCell
+        else GameOver gCell
 
     let displayGame (g:State) =
         let b = g.board
-        for i in b do
-            printf "%A\n" i
+        for r in b do
+            for c in r do
+                let s =
+                    if c = 0<V> then "   _"
+                    else sprintf "% 4d" (c/1<V>)
+                printf " %s " s
+            printf "\n"
         printfn "score = %A" g.score
         printfn "---------------------------"
 

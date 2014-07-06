@@ -191,12 +191,12 @@ module Game =
     let hasMergeableCell (g:State) =
         let dirs = [[Left]; [Right]; [Up]; [Down]]
         let dirs2 = cartesian dirs dirs
-        let applySteps moves =
-            let h = cloneGame g
-            let hh = List.fold (fun s dir -> move s dir) h moves
-            let hasChanged = g.score <> hh.score
+        let mergingMoves moves =
+            let cloned = cloneGame g
+            let moved = List.fold (fun gAcc dir -> move gAcc dir) cloned moves
+            let hasChanged = moved.score > g.score
             hasChanged
-        let changerMove = Seq.tryFind applySteps dirs2
+        let changerMove = Seq.tryFind mergingMoves dirs2
         changerMove <> None
 
     let freeCells (g:State) =
@@ -232,16 +232,19 @@ module Game =
                        //random = fun n -> 0 // always return 0 temporarily, for test.
         }
 
-
     let play (g:State) (m:Move) =
+        let gPrevious = cloneGame g
         let gMoved = move g m
-        let gCell =
-            if hasEmptyCell gMoved
-            then setRandomCell gMoved
-            else gMoved
-        if hasMergeableCell gCell || hasEmptyCell gCell
-        then GameContinue gCell
-        else GameOver gCell
+        if gMoved.board = gPrevious.board
+        then GameContinue gPrevious
+        else
+            let gCell =
+                        if hasEmptyCell gMoved
+                        then setRandomCell gMoved
+                        else gMoved
+            if hasMergeableCell gCell || hasEmptyCell gCell
+            then GameContinue gCell
+            else GameOver gCell
 
     let displayGame (g:State) =
         let b = g.board

@@ -212,7 +212,9 @@ module Game =
         (!count, !freeCells)
 
     let randomCellValue (g:State) =
-        2<V> // return 2 always, temporarily for test
+        if g.random(10) < 9
+        then 2<V>
+        else 4<V>
 
     let setRandomCell (g:State) =
         match freeCells g with
@@ -233,6 +235,9 @@ module Game =
                        iter   = 0;
                        //random = fun n -> 0 // always return 0 temporarily, for test.
         }
+    
+    let isGameWon g : bool =
+        biggestCell g = 2048<V>
 
     let play (g:State) (m:Move) =
         let gCloned = cloneGame g
@@ -242,15 +247,19 @@ module Game =
             GameContinue gCloned
         else
             let gIncr = {gMoved with iter = gMoved.iter + 1 }
-            let gCell =
-                        if hasFreeCells gIncr
-                        then
-                            setRandomCell gIncr
-                        else
-                            gIncr
-            if hasMergeableCell gCell || hasFreeCells gCell
-            then GameContinue gCell
-            else GameOver gCell
+            if isGameWon gIncr
+            then
+                GameOver gIncr
+            else
+                let gCell =
+                            if hasFreeCells gIncr
+                            then
+                                setRandomCell gIncr
+                            else
+                                gIncr
+                if hasMergeableCell gCell || hasFreeCells gCell
+                then GameContinue gCell
+                else GameOver gCell
 
     let displayGame (g:State) =
         let b = g.board

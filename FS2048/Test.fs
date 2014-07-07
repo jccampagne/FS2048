@@ -325,7 +325,7 @@ type Test() =
                                 [| 0<V>; 0<V>; 0<V>; 4<V>|]
                                 [| 0<V>; 0<V>; 0<V>; 0<V>|]
                             |]
-        Assert.IsTrue (hasEmptyCell s)
+        Assert.IsTrue (hasFreeCells s)
 
     [<Test>]
     member x.``has no empty cell``() =
@@ -336,7 +336,7 @@ type Test() =
                                 [| 2<V>; 2<V>; 2<V>; 4<V>|]
                                 [| 2<V>; 2<V>; 2<V>; 2<V>|]
                             |]
-        Assert.IsFalse (hasEmptyCell s)
+        Assert.IsFalse (hasFreeCells s)
 
     [<Test>]
     member x.``has mergeable cell``() =
@@ -421,7 +421,7 @@ type Test() =
                             |]
         let s = {s with random = fun _ -> 0 }
         let s1 = setRandomCell s
-        Assert.IsTrue (hasEmptyCell s1)
+        Assert.IsTrue (hasFreeCells s1)
         s1
         |> bindCheckBoard __LINE__
             [|

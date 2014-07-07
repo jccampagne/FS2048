@@ -163,7 +163,7 @@ module Game =
         slide g direction
         {g with score = g.score + !pointsAcc}
 
-    let hasEmptyCell (g:State) =
+    let hasFreeCells (g:State) =
         let findRow row =
             let result = Seq.tryFind (fun cell -> cell = 0<V>) row
             match result with
@@ -239,10 +239,10 @@ module Game =
         then GameContinue gPrevious
         else
             let gCell =
-                        if hasEmptyCell gMoved
+                        if hasFreeCells gMoved
                         then setRandomCell gMoved
                         else gMoved
-            if hasMergeableCell gCell || hasEmptyCell gCell
+            if hasMergeableCell gCell || hasFreeCells gCell
             then GameContinue gCell
             else GameOver gCell
 

@@ -44,6 +44,7 @@
     <Compile Include="AutoRandomConsole.fs" />
     <Compile Include="AutoMaxConsole.fs" />
     <Compile Include="AutoMax2Console.fs" />
+    <Compile Include="Auto3Console.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />

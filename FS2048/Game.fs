@@ -233,15 +233,18 @@ module Game =
         }
 
     let play (g:State) (m:Move) =
-        let gPrevious = cloneGame g
-        let gMoved = move g m
-        if gMoved.board = gPrevious.board
-        then GameContinue gPrevious
+        let gCloned = cloneGame g
+        let gMoved = move gCloned m
+        if gMoved.board = g.board
+        then
+            GameContinue gCloned
         else
             let gCell =
                         if hasFreeCells gMoved
-                        then setRandomCell gMoved
-                        else gMoved
+                        then
+                            setRandomCell gMoved
+                        else
+                            gMoved
             if hasMergeableCell gCell || hasFreeCells gCell
             then GameContinue gCell
             else GameOver gCell

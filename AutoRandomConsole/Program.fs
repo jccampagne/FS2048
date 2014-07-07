@@ -11,6 +11,6 @@ let main argv =
     let player = Auto3Console.getMove
     let endGame = Game.loop g player
     Game.displayGame endGame
-    printfn "%d, %d" ((Game.biggestCell endGame) / 1<Game.V>) (endGame.score / 1<Game.P>)
+    printfn "%d, %d, %d" ((Game.biggestCell endGame) / 1<Game.V>) (endGame.score / 1<Game.P>) (endGame.iter)
     0
 

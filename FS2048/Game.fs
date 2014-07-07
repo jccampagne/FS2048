@@ -28,6 +28,7 @@ module Game =
 
     type State = {board : Board;
                   score : Score;
+                  iter  : int;
                   random : int -> int}
 
     type Status =   GameOver     of State
@@ -228,7 +229,8 @@ module Game =
         let randomer = fun n -> r.Next(n)
         setRandomCell {board = zeroBoard ();
                        score = 0<P>;
-                       random = randomer
+                       random = randomer;
+                       iter   = 0;
                        //random = fun n -> 0 // always return 0 temporarily, for test.
         }
 
@@ -239,12 +241,13 @@ module Game =
         then
             GameContinue gCloned
         else
+            let gIncr = {gMoved with iter = gMoved.iter + 1 }
             let gCell =
-                        if hasFreeCells gMoved
+                        if hasFreeCells gIncr
                         then
-                            setRandomCell gMoved
+                            setRandomCell gIncr
                         else
-                            gMoved
+                            gIncr
             if hasMergeableCell gCell || hasFreeCells gCell
             then GameContinue gCell
             else GameOver gCell
@@ -258,7 +261,7 @@ module Game =
                     else sprintf "% 4d" (c/1<V>)
                 printf " %s " s
             printf "\n"
-        printfn "score = %A" g.score
+        printfn "score = %A, iter = %d" g.score g.iter
         printfn "---------------------------"
 
     let rec loop (g:State) (player:Player) =

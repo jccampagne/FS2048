@@ -253,10 +253,8 @@ module Game =
             else
                 let gCell =
                             if hasFreeCells gIncr
-                            then
-                                setRandomCell gIncr
-                            else
-                                gIncr
+                            then setRandomCell gIncr
+                            else gIncr
                 if hasMergeableCell gCell || hasFreeCells gCell
                 then GameContinue gCell
                 else GameOver gCell

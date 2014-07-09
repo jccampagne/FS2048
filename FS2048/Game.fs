@@ -123,43 +123,22 @@ module Game =
         let b = g.board
         let pointsAcc = (ref 0<P>)
         let points = (
+            let move_udrl (rstart, rstep, rend, rdelta) (cstart, cstep, cend, cdelta) =
+                for r in rstart..rstep..rend do
+                    for c in cstart..cstep..cend do
+                        let rr = r + rdelta
+                        let cc = c + cdelta
+                        let u = b.[r] .[c]
+                        let v = b.[rr].[cc]
+                        let (x, y, points) = merge u v
+                        b.[r] .[c]  <- x
+                        b.[rr].[cc] <- y
+                        pointsAcc := !pointsAcc + points
             match direction with
-             Up ->
-                for r in 0..2 do
-                    for c in 0..3 do
-                        let u = b.[r].[c]
-                        let v = b.[r+1].[c]
-                        let (x, y, points) = merge u v
-                        b.[r]  .[c] <- x
-                        b.[r+1].[c] <- y
-                        pointsAcc := !pointsAcc + points
-            | Down  ->
-                for r in 3..-1..1 do
-                    for c in 0..3 do
-                        let u = b.[r].[c]
-                        let v = b.[r-1].[c]
-                        let (x, y, points) = merge u v
-                        b.[r].[c]   <- x
-                        b.[r-1].[c] <- y
-                        pointsAcc := !pointsAcc + points
-            | Left  ->
-                for r in 0..3 do
-                    for c in 0..2 do
-                        let u = b.[r].[c]
-                        let v = b.[r].[c+1]
-                        let (x, y, points) = merge u v
-                        b.[r].[c]   <- x
-                        b.[r].[c+1] <- y
-                        pointsAcc := !pointsAcc + points
-            | Right ->
-                for r in 0..3 do
-                    for c in 3..-1..1 do
-                        let u = b.[r].[c]
-                        let v = b.[r].[c-1]
-                        let (x, y, points) = merge u v
-                        b.[r].[c]   <- x
-                        b.[r].[c-1] <- y
-                        pointsAcc := !pointsAcc + points
+            | Up    -> move_udrl (0, 1, 2, 1) (0, 1, 3, 0)
+            | Down  -> move_udrl (3,-1, 1,-1) (0, 1, 3, 0)
+            | Left  -> move_udrl (0, 1, 3, 0) (0, 1, 2, 1)
+            | Right -> move_udrl (0, 1, 3, 0) (3,-1, 1,-1)
             )
         slide g direction
         {g with score = g.score + !pointsAcc}
@@ -214,7 +193,7 @@ module Game =
     let randomCellValue (g:State) =
         if g.random(10) < 9
         then 2<V>
-        else 4<V>
+        else 2<V> ////////////// not 4<V> for now
 
     let setRandomCell (g:State) =
         match freeCells g with

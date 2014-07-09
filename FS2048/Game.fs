@@ -123,39 +123,20 @@ module Game =
         let b = g.board
         let pointsAcc = (ref 0<P>)
         let points = (
-
-            let move_up_down (rstart, rstep, rend) =
+            let move_udrl (rstart, rstep, rend, rdelta) (cstart, cstep, cend, cdelta) =
                 for r in rstart..rstep..rend do
-                    for c in 0..3 do
-                        let u = b.[r].[c]
-                        let v = b.[r+rstep].[c]
-                        let (x, y, points) = merge u v
-                        b.[r].[c]       <- x
-                        b.[r+rstep].[c] <- y
-                        pointsAcc := !pointsAcc + points
-            let move_right_left (cstart, cstep, cend) =
-                for r in 0..3 do
                     for c in cstart..cstep..cend do
                         let u = b.[r].[c]
-                        let v = b.[r].[c+cstep]
+                        let v = b.[r+rdelta].[c+cdelta]
                         let (x, y, points) = merge u v
-                        b.[r].[c]       <- x
-                        b.[r].[c+cstep] <- y
+                        b.[r].[c]               <- x
+                        b.[r+rdelta].[c+cdelta] <- y
                         pointsAcc := !pointsAcc + points
-
             match direction with
-             Up ->
-                let rstart, rstep, rend = 0,1,2
-                move_up_down (rstart, rstep, rend)
-            | Down  ->
-                let rstart, rstep, rend = 3, -1, 1
-                move_up_down (rstart, rstep, rend)
-            | Left  ->
-                let cstart, cstep, cend = 0, 1, 2
-                move_right_left (cstart, cstep, cend)
-            | Right ->
-                let cstart, cstep, cend = 3, -1, 1
-                move_right_left (cstart, cstep, cend)
+            | Up    -> move_udrl (0, 1, 2, 1) (0, 1, 3, 0)
+            | Down  -> move_udrl (3,-1, 1,-1) (0, 1, 3, 0)
+            | Left  -> move_udrl (0, 1, 3, 0) (0, 1, 2, 1)
+            | Right -> move_udrl (0, 1, 3, 0) (3,-1, 1,-1)
             )
         slide g direction
         {g with score = g.score + !pointsAcc}

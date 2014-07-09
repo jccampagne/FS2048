@@ -126,11 +126,13 @@ module Game =
             let move_udrl (rstart, rstep, rend, rdelta) (cstart, cstep, cend, cdelta) =
                 for r in rstart..rstep..rend do
                     for c in cstart..cstep..cend do
-                        let u = b.[r].[c]
-                        let v = b.[r+rdelta].[c+cdelta]
+                        let rr = r + rdelta
+                        let cc = c + cdelta
+                        let u = b.[r] .[c]
+                        let v = b.[rr].[cc]
                         let (x, y, points) = merge u v
-                        b.[r].[c]               <- x
-                        b.[r+rdelta].[c+cdelta] <- y
+                        b.[r] .[c]  <- x
+                        b.[rr].[cc] <- y
                         pointsAcc := !pointsAcc + points
             match direction with
             | Up    -> move_udrl (0, 1, 2, 1) (0, 1, 3, 0)

@@ -123,48 +123,39 @@ module Game =
         let b = g.board
         let pointsAcc = (ref 0<P>)
         let points = (
+
+            let move_up_down (rstart, rstep, rend) =
+                for r in rstart..rstep..rend do
+                    for c in 0..3 do
+                        let u = b.[r].[c]
+                        let v = b.[r+rstep].[c]
+                        let (x, y, points) = merge u v
+                        b.[r].[c]       <- x
+                        b.[r+rstep].[c] <- y
+                        pointsAcc := !pointsAcc + points
+            let move_right_left (cstart, cstep, cend) =
+                for r in 0..3 do
+                    for c in cstart..cstep..cend do
+                        let u = b.[r].[c]
+                        let v = b.[r].[c+cstep]
+                        let (x, y, points) = merge u v
+                        b.[r].[c]       <- x
+                        b.[r].[c+cstep] <- y
+                        pointsAcc := !pointsAcc + points
+
             match direction with
              Up ->
-
                 let rstart, rstep, rend = 0,1,2
-                for r in rstart..rstep..rend do
-                    for c in 0..3 do
-                        let u = b.[r].[c]
-                        let v = b.[r+rstep].[c]
-                        let (x, y, points) = merge u v
-                        b.[r].[c]       <- x
-                        b.[r+rstep].[c] <- y
-                        pointsAcc := !pointsAcc + points
+                move_up_down (rstart, rstep, rend)
             | Down  ->
                 let rstart, rstep, rend = 3, -1, 1
-                for r in rstart..rstep..rend do
-                    for c in 0..3 do
-                        let u = b.[r].[c]
-                        let v = b.[r+rstep].[c]
-                        let (x, y, points) = merge u v
-                        b.[r].[c]       <- x
-                        b.[r+rstep].[c] <- y
-                        pointsAcc := !pointsAcc + points
+                move_up_down (rstart, rstep, rend)
             | Left  ->
                 let cstart, cstep, cend = 0, 1, 2
-                for r in 0..3 do
-                    for c in cstart..cstep..cend do
-                        let u = b.[r].[c]
-                        let v = b.[r].[c+cstep]
-                        let (x, y, points) = merge u v
-                        b.[r].[c]       <- x
-                        b.[r].[c+cstep] <- y
-                        pointsAcc := !pointsAcc + points
+                move_right_left (cstart, cstep, cend)
             | Right ->
                 let cstart, cstep, cend = 3, -1, 1
-                for r in 0..3 do
-                    for c in cstart..cstep..cend do
-                        let u = b.[r].[c]
-                        let v = b.[r].[c+cstep]
-                        let (x, y, points) = merge u v
-                        b.[r].[c]       <- x
-                        b.[r].[c+cstep] <- y
-                        pointsAcc := !pointsAcc + points
+                move_right_left (cstart, cstep, cend)
             )
         slide g direction
         {g with score = g.score + !pointsAcc}
